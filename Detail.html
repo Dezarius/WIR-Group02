@@ -2,7 +2,58 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Unbenanntes Dokument</title>
+<title>Berührungspunkte Detail</title>
+<script>
+	var request = new XMLHttpRequest();
+
+	request.onreadystatechange = function() {
+		// console.log("onreadystatechange: " + request.readyState + ", " +  request.status);
+		// console.log(request.responseText);
+		if (request.readyState == 4) {
+			if (request.status == 200) {
+				var response = JSON.parse(request.responseText);
+				handlers[response._id](response);
+			}
+			if (request.status == 404) {
+				console.log("not found: " + request.responseText);
+			}
+		}
+	};
+
+	function get(variable) {
+		// console.log("get " + variable);
+		request.open("GET", dburl + variable, false);
+		request.send();
+	}
+
+	function update() {
+		for (var name in handlers) {
+			// console.log("updating " + name);
+			get(name);
+		}
+	}
+
+	// request updates at a fixed interval (ms)
+	var intervalID = setInterval(update, 1000);
+
+	///////////////////////////////////////////////////////////////////////////////
+	// your code below
+
+	var dbname = "wir";
+	var dburl = "http://127.0.0.1:5984/" + dbname + "/";
+	var handlers = {
+		"ort" : updateOrt,
+		// add further handlers here
+	};
+	
+	function updateOrt(response) {
+		if (response.open) {
+			document.getElementById("ort").className = "dropdown open"
+		} else {
+			document.getElementById("ort").className = "dropdown"
+		}
+	}
+</script>
 <style type="text/css">
 	body {
 		margin: 0;
@@ -116,11 +167,11 @@
 <body style="background-color: lightgray">
 	<div class="navbar">
 		<div class="container-fluid">
-			<a class="navbar-brand" href="#">Berührungspunkte</a>
+			<a class="navbar-brand" href="./MainPage.html">Berührungspunkte</a>
 			<div class="navbar-elements">
 				<li><a href="#">About</a></li>
 				<li><a href="#">Medium</a></li>
-				<li class="dropdown">
+				<li id="ort" class="dropdown">
 					<a href="#">Ort</a>
 					<ul class="dropdown-menu">
 						<li><a href="#">Hannover</a></li>
@@ -146,7 +197,6 @@
 			Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget condimentum rhoncus, sem quam semper libero, sit amet adipiscing sem neque sed ipsum. Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. <br>
 			At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat.
 		</p>
-		
 	</div>
 </body>
 </html>
