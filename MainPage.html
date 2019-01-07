@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<script>
+
+
+  var numZeilen = 0;
+  var numInfoZeilen= 0;
+  var InfoZeilenName= "";
+
+
+  function printTestText(id) {
+    if(numInfoZeilen==0) {
+      document.getElementById(id).style.filter = "grayscale(0%)";
+      document.getElementById("testtext").innerHTML= "TESTERFOLGRICH!" + id + " " + id[3];
+    }
+  }
+  function printTestTextWeg(id) {
+    if(numInfoZeilen==0) {
+      document.getElementById(id).style.filter = "grayscale(70%)";
+      document.getElementById("testtext").innerHTML= "";
+    }
+
+  }
+
+  function clickedOnElement(id) {
+
+    if(numInfoZeilen>0) {
+      for(i=0; i<numZeilen; i++) {
+        for(j=0; j<4; j++) {
+          var IDname = "pic" + i + j; {
+            document.getElementById(IDname).style.filter = "grayscale(70%)";
+          }
+        }
+      }
+      document.getElementById(InfoZeilenName).remove();
+      numInfoZeilen=0;
+    } else {
+      for(i=0; i<numZeilen; i++) {
+        for(j=0; j<4; j++) {
+          var IDname = "pic" + i + j; {
+            document.getElementById(IDname).style.filter = "grayscale(100%)";
+          }
+        }
+      }
+      document.getElementById(id).style.filter = "grayscale(0%)";
+      openInformation(id)
+    }
+
+  }
+
+  function openInformation(id) {
+
+    document.getElementById("testtext").innerHTML = "clickedOn" + id;
+    var neueZeile = document.createElement("div");
+    neueZeile.className = "clearfix1";
+
+    var newBox1 = document.createElement("div");
+    newBox1.className = "boxWhite";
+    neueZeile.appendChild(newBox1);
+
+    var newBox2 = document.createElement("div");
+    newBox2.className = "boxInformation";
+    newBox2.style.color = "black";
+
+    var headline = document.createElement("div");
+    headline.className = "boxInformationHeadline";
+    headline.innerHTML = "InfoTextUeberschrift";
+    newBox2.appendChild(headline);
+    var information = document.createElement("div");
+    information.className = "boxInformationInformation";
+    information.innerHTML = "Hier seht ein Informationstext mit naeheren Informationen zu " + id;
+    newBox2.appendChild(information);
+    neueZeile.appendChild(newBox2);
+
+
+    var newBox3 = document.createElement("div");
+    newBox3.className = "boxWhite";
+    var neueZeileID = "iz" + id;
+    InfoZeilenName = neueZeileID;
+    neueZeile.setAttribute("id", neueZeileID);
+    neueZeile.appendChild(newBox3);
+    var neueZeilePos = "z" + id[3];
+    var referenceNode = document.getElementById(neueZeilePos);
+
+    referenceNode.after(neueZeile);
+    numInfoZeilen = 1;
+    /*document.getElementById("testDiv1").appendChild(neueZeile);*/
+  }
+
+  var images = null;
+
+  function createNewElements(n){
+    images = [];
+    for(i=0; i<6; i++) {
+      images[i] = "herrenhausen" + i;
+    }
+
+    var color = 1;
+    document.getElementById("testtext").innerHTML = "";
+    for(i=0; i<n; i++) {
+      if(color==1) {
+        color=2;
+      } else {
+        color=1;
+      }
+      var neueZeile = document.createElement("div");
+      neueZeile.className = "clearfix1";
+
+      var newPic = document.createElement("div");
+      newPic.className = "boxWhite";
+      neueZeile.appendChild(newPic);
+
+      for(var j=0; j<4; j++) {
+        var newPic = document.createElement("IMG");
+        var rand = Math.floor(Math.random() * 6);
+        var randPic = "herrenhausen" + rand + ".jpg";
+        newPic.setAttribute("src", randPic);
+        newPic.style.filter = "grayscale(70%)";
+        newPic.className = "boxPictures";
+        newPic.innerHTML = "Hallo!"
+        var newID = "pic" + i + "" + j;
+        newPic.setAttribute("id", newID);
+        newPic.addEventListener('mouseover', function() { printTestText(this.getAttribute("id")); });
+        newPic.addEventListener('mouseout', function() { printTestTextWeg(this.getAttribute("id")); });
+        newPic.addEventListener('click', function() { clickedOnElement(this.getAttribute("id")); });
+        if(color ==1) {
+          newPic.style.backgroundColor= "red";
+          color =2;
+        } else {
+          newPic.style.backgroundColor= "lightblue";
+          color =1;
+        }
+
+        neueZeile.appendChild(newPic);
+      }
+
+      var newPic = document.createElement("div");
+      newPic.className = "boxWhite";
+      neueZeile.appendChild(newPic);
+      var newID = "z" + i;
+      neueZeile.setAttribute("id", newID);
+      document.getElementById("testDiv1").appendChild(neueZeile);
+
+      document.getElementById("testtext").innerHTML = document.getElementById("testtext").innerHTML + i;
+    }
+  }
+
+  function eventHandler() {
+    var z = 10;
+    numZeilen = z;
+    createNewElements(z);
+    document.getElementById("testtext").innerHTML=document.getElementById("testtext").innerHTML +  "TestErfolgreich!";
+  }
+
+  document.addEventListener('DOMContentLoaded', eventHandler, false);
+
+</script>
+<style>
+
+html {
+  font-size: 100%;
+}
+body {
+  margin: 0px;
+  background-color: white;
+}
+
+.boxWhiteMenu {
+  float:left;
+  text-align: center;
+  left:0%;
+  position: fixed;
+  width: 10%;
+  height: 10%;
+}
+.boxMenue1 {
+  float:left;
+  text-align: left;
+  left: 10%;
+  position: fixed;
+  z-index: 100;
+  width: 60%;
+  height: 10%;
+  font-size: 3vh;
+}
+.boxMenue2 {
+  text-align: right;
+  vertical-align: middle;
+  left: 60%;
+  position: fixed;
+  z-index: 100;
+  width: 10%;
+  height: 10%;
+  font-size: 1.5vh;
+}
+.boxMenue3 {
+  text-align: right;
+  position: fixed;
+  left: 70%;
+  z-index: 100;
+  width: 10%;
+  height: 10%;
+  font-size: 1.5vh;
+}
+.boxMenue4 {
+  text-align: right;
+  position: fixed;
+  left: 80%;
+  z-index: 100;
+  width: 10%;
+  height: 10%;
+  font-size: 1.5vh;
+}
+.clearfixMenue::after {
+  content: "";
+  vertical-align: bottom;
+  clear: both;
+  display: table;
+  height: 10%;
+  width: 100%;
+}
+
+.contend {
+  width: 100%;
+  padding-top: 5%;
+}
+
+.boxWhite {
+  float:left;
+  text-align: center;
+  width: 10%;
+  height: 14vw;
+}
+.boxPictures {
+  float:left;
+  text-align: center;
+  width: 20%;
+  height: 15vw;
+}
+.clearfix1::after {
+
+  height: 0vw;
+  position: relative;
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.boxInformation {
+  float:left;
+  text-align: center;
+  width: 80%;
+  height: 20vw;
+  background-color: lightgray;
+}
+.boxInformationHeadline {
+  float:left;
+  text-align: center;
+  left: 20%
+  width: 80%;
+  height: 5vw;
+  font-size: 1.5vh;
+}
+.boxInformationInformation {
+  float:left;
+  text-align: center;
+  left: 20%;
+  width: 80%;
+  height: 15vw;
+  background-color: lightgray;
+  font-size: 0.5vh;
+}
+.tw1 {
+}
+.tw2 {
+
+}
+
+</style>
+
+
+</head>
+  <div class="clearfixMenue">
+    <div class="boxWhiteMenu" style="background-color:white">
+        <h4 ></h4>
+    </div>
+    <div class="boxMenue1" style="background-color:black">
+        <tw1 id="Ueberschrift" style="color:white" > Beruehrungspunkte</tw1>
+    </div>
+    <div class="boxMenue2" style="background-color:black">
+        <tw2 id="Ueberschrift" style="color:white" >Medium</tw2>
+    </div>
+    <div class="boxMenue3" style="background-color:black">
+        <tw2 id="Ueberschrift" style="color:white" >Orte</tw2>
+    </div>
+    <div class="boxMenue4" style="background-color:black">
+        <tw2 id="Ueberschrift" style="color:white" >About</tw2>
+    </div>
+    <div class="boxWhiteMenu" style="background-color:white">
+        <h4 ></h4>
+    </div>
+  </div>
+  <div class="contend">
+    <div id="testDiv1" ></div>
+  </div>
+  <h1 id ="testtext" >Empty</h1>
+</body>
+
+</html>
